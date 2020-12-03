@@ -1,5 +1,4 @@
 const fs = require('fs');
-// const input = fs.readFileSync(`${__dirname}/input.txt`, 'utf-8').trim().split('\n');
 const input = fs.readFileSync(`${__dirname}/input.txt`, 'utf-8').trim().split('\n').map(row => row.split(''));
 
 function traverseSlope([right, down], trees = []) {
@@ -9,9 +8,7 @@ function traverseSlope([right, down], trees = []) {
         return trees.length;
     }
     if (right >= input[down].length) {
-        console.table([right, input[down].length])
         const diff = right - input[down].length;
-        console.log('DIFF: ', diff);
         right = diff;
     }
 
