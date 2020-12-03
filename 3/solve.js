@@ -32,4 +32,5 @@ const part1 = traverseSlope([0,0], [3, 1]);
 const part2 = part2Slopes.map(arr => traverseSlope([0,0], arr)).reduce((a, b) => a * b);
 
 console.log(part1);
+
 console.log(part2);
