@@ -4,14 +4,15 @@ const input = fs.readFileSync(`${__dirname}/${file}.txt`, 'utf-8').trim();
 
 const passports = input.split('\n\n').map(passport => {
   const regex = /[\s\n]/;
-  return passport.split(regex).map(field => {
-    const key = field.split(':')[0];
-    const value = field.split(':')[1];
-    return {
-      key,
-      value
-    }
+  const obj = {};
+  
+  passport.split(regex).forEach(field => {
+    field = field.split(':');
+    const key = field[0];
+    const value = field[1];
+    obj[key] = value;
   });
+  return obj;
 });
 
 console.log(passports);
