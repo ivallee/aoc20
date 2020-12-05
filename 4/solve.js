@@ -55,16 +55,18 @@ const validateRange = ({ val, bottom, top}) => {
 }
 
 const validateHeight = (height) => {
-  const regex = /([1-9]+)(cm|in)/;
+  const regex = /([0-9]+)(cm|in)/;
   if (regex.test(height)) {
     const matched = height.match(regex);
     const val = Number(matched[1]);
     const measure = matched[2];
-    console.log(measure)
+    // console.log(measure)
     const { bottom, top } = measure === 'in' ? { bottom: 59, top: 76 } : { bottom: 150, top: 193 };
-    console.log({val, bottom, top})
+    // console.log(height, validateRange({ val, bottom, top }));
+    // console.log({val, bottom, top})
     return validateRange({ val, bottom, top });
   }
+  return false;
 }
 
 function part2(input) {
@@ -82,15 +84,17 @@ function part2(input) {
     if (!eyr || !validateRange({ val: Number(eyr), bottom: 2020, top: 2030 })) {
       return false;
     }
+
     if (!hgt || !validateHeight(hgt)) {
-      console.log('Invalid hgt!\n', hgt);
+      // console.log('Invalid hgt!\n', hgt, passport);
       return false;
     }
     if (!hcl || !/^#[0-9a-f]{6}$/i.test(hcl)) {
+      console.log('Invalid hcl!\n', hcl, passport);
       return false;
     }
 
-    const eyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'oth'];
+    const eyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'];
     if (!ecl || !eyeColors.includes(ecl)) {
       return false;
     }
