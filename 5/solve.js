@@ -29,10 +29,7 @@ const getSeatIDs = (pass) => {
 };
 
 const findMissing = (arr) => {
-  return arr.filter((num, i) => {
-    console.log(num);
-    return num + 1 !== arr[i + 1] && arr[i + 1] !== undefined;
-  });
+  return arr.filter((num, i) => num + 1 !== arr[i + 1] && arr[i + 1] !== undefined );
 };
 
 function partOne(input) {
@@ -40,13 +37,10 @@ function partOne(input) {
 }
 
 function partTwo(input) {
-  let seatIDs = input.map(getSeatIDs).sort((a, b) => a - b);
-
-  return findMissing(seatIDs);
-  // console.log(seatIDs);
-  // return (Math.min(...seatIDs), Math.max(...seatIDs));
+  const seatIDs = input.map(getSeatIDs).sort((a, b) => a - b);
+  return findMissing(seatIDs)
 }
 
-// console.log(partOne(input));
+console.log(partOne(input));
 console.log(partTwo(input));
 
