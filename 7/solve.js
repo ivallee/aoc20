@@ -22,14 +22,29 @@ const bagTypes = rules.map(rule => {
   if (firstContainedBag && firstContainedBag === 'no other') {
     return bagObject;
   } else {
-    bagObject[rootBag][firstContainedBag] = firstContainedQuantity;
+    bagObject[rootBag][firstContainedBag] = Number(firstContainedQuantity.trim());
   }
 
   if (matched[2]) {
     const secondContainedBag = matched[2][2];
     const secondContainedQuantity = matched[2][1];
-    bagObject[rootBag][secondContainedBag] = secondContainedQuantity;
+    bagObject[rootBag][secondContainedBag] = Number(secondContainedQuantity.trim());
   }
   return bagObject;
 });
-console.log(bagTypes)
+
+
+const getBag = (arr, bagName) => {
+  return arr.find(bag => Object.keys(bag)[0] === bagName);
+};
+
+// function containsTargetBah
+// const containsTargetBag = (arr, subjectBag, targetBag) => {
+//   const bagType = Object.keys(bagObject)[0];
+//   const containingBags = Object.keys(bagObject[bagType]);
+//   console.log(containingBags)
+//   if (bagObject[bagType][targetBag]) return true;
+
+
+// };
+console.log(getBag(bagTypes, 'shiny gold'));
