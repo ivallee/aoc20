@@ -7,20 +7,29 @@ let rules = fs.readFileSync(`${__dirname}/${file}.txt`, 'utf-8').trim().split('\
 // parse bags into keys
 
 // map each rule, parsing bags along the way.
-  // return what each bag contains 
+  // return what each bag contains
 
-const bagTypes = rules.map(rule => { 
-  // const bag = `${rule.split(' ')[0]} ${rule.split(' ')[1]}`;
+const bagTypes = rules.map(rule => {
   const regex = /(\d\s)?(\w+\s\w+)(?= +bag|bags\b)/g;
-  const matched = [...rule.matchAll(regex)];
-  console.log(matched)
-  // first element is key
-  const example = {
-    'light red': {
-      'bright white': 1,
-      'muted yellow': 2
-    }
+  let matched = [...rule.matchAll(regex)];
+
+  let bagObject = {};
+  const rootBag = matched[0][2];
+  bagObject[rootBag] = {};
+  const firstContainedBag = matched[1][2];
+  const firstContainedQuantity = matched[1][1];
+
+  if (firstContainedBag && firstContainedBag === 'no other') {
+    return bagObject;
+  } else {
+    bagObject[rootBag][firstContainedBag] = firstContainedQuantity;
   }
-  // return { bag };
+
+  if (matched[2]) {
+    const secondContainedBag = matched[2][2];
+    const secondContainedQuantity = matched[2][1];
+    bagObject[rootBag][secondContainedBag] = secondContainedQuantity;
+  }
+  return bagObject;
 });
 console.log(bagTypes)
