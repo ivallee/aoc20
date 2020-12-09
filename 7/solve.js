@@ -2,13 +2,6 @@ const fs = require('fs');
 const file = process.argv.slice(2);
 let rules = fs.readFileSync(`${__dirname}/${file}.txt`, 'utf-8').trim().split('\n');
 
-// separate rules
-// regex 2 words + bags
-// parse bags into keys
-
-// map each rule, parsing bags along the way.
-  // return what each bag contains
-
 const bagTypes = rules.map(rule => {
   const regex = /(\d\s)?(\w+\s\w+)(?= +bag|bags\b)/g;
   let matched = [...rule.matchAll(regex)];
@@ -30,7 +23,6 @@ const bagTypes = rules.map(rule => {
     const secondContainedQuantity = matched[2][1];
     bagObject[rootBag][secondContainedBag] = Number(secondContainedQuantity.trim());
   }
- console.log(matched[3])
   if (matched[3]) {
     const thirdContainedBag = matched[3][2];
     const thirdContainedQuantity = matched[3][1];
@@ -50,45 +42,43 @@ const getBag = (arr, bagName) => {
   return arr.find(bag => Object.keys(bag)[0] === bagName);
 };
 
-
-
 const containsTargetBag = (bag, targetBag) => {
   const bagType = Object.keys(bag)[0];
   if (Object.keys(bag[bagType]).length === 0) {
-    // console.log('you reached the end my friend', bag);
     return false;
   }
 
-  // if (bagType === targetBag) {
-  //   console.log('winner!', bag);
-  //   return true;
-  // }
   return Object.keys(bag[bagType]).some(containingBag => {
 
     if (containingBag === targetBag) {
-      // console.log('winner!', bag);
       return true;
     }
     const containingBagObject = getBag(bagTypes, containingBag);
-    // if (Object.keys(containingBagObject)[0] === targetBag) {
-    //   console.log('found!');
-    //   return true;
-    // }
     return containsTargetBag(containingBagObject, targetBag);
   });
-  // if (bagObject[bagType][targetBag]) return true;
 };
 
-// function containsTargetBah
-// const containsTargetBag = (arr, subjectBag, targetBag) => {
-//   const bagType = Object.keys(bagObject)[0];
-//   const containingBags = Object.keys(bagObject[bagType]);
-//   console.log(containingBags)
-//   if (bagObject[bagType][targetBag]) return true;
+const countBags = (bag) => {
+  const bagName = Object.keys(bag)[0];
+  const bagCount = Object.keys(bag[bagName]).reduce((a, b) => a + bag[bagName][b], 0);
+  return bagCount;
+}
 
+const countBagsRecursively = (bag) => {
+  const bagName = Object.keys(bag)[0];
+  let bags = countBags(bag);
+  if (bags === 0) return 0;
+  Object.keys(bag[bagName]).forEach(b => {
+    const innerBag = getBag(bagTypes, b)
+    const thisBagCount = bag[bagName][b];
+    bags += (countBagsRecursively(innerBag) * thisBagCount)
+  });
+  return bags;
+}
 
-// };
-// console.log(getBag(bagTypes, 'shiny gold'));
 console.log(bagTypes.filter(bag => {
   return containsTargetBag(bag, 'shiny gold');
 }).length);
+
+
+console.log(countBagsRecursively(getBag(bagTypes, 'shiny gold')));
