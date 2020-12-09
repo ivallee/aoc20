@@ -7,11 +7,9 @@ function run(input) {
   let i = 0;
   const commandObj = {};
   while (i < input.length) {
-    // console.log(input[i], accumulator)
     const command = input[i].split(' ')[0];
     const num = input[i].split(' ')[1];
     if (commandObj[command + i] === 'executed') {
-      console.log('repeat')
       return false;
     } else {
       commandObj[command + i] = 'executed';
@@ -34,33 +32,33 @@ function run(input) {
       console.log('done!!!', accumulator)
       return true;
     }
-    // console.log('final', accumulator)
   }
 }
 
-let valid = false;
-let i = 0;
+function replaceCommands(input) {
 
-while (valid === false) {
-  // console.log(i, rules.length)
-  if (run(rules)) {
-    valid = true;
-  // } else if (rules[i].indexOf('jmp') !== -1) {
-  //   console.log('replacing jmp')
-  //   rules[i] = rules[i].replace('jmp', 'nop');
-  // }
-  } else if (rules[i].indexOf('nop') !== 1) {
-    console.log('replacing nop')
-    rules[i] = rules[i].replace('nop', 'jmp');
+  let jmps = [];
+  let nops = [];
+  input.forEach((rule, i) => {
+    if (rule.indexOf('jmp') !== -1) {
+      jmps.push(i);
+    } else if (rule.indexOf('nop') !== -1) {
+      nops.push(i);
+    }
+  })
+
+  try {
+    jmps.forEach(cmd => {
+      const inputCopy = [...input];
+      inputCopy[cmd] = inputCopy[cmd].replace('jmp', 'nop');
+      console.log(inputCopy)
+      if (run(inputCopy)) {
+        throw new Error;
+      }
+    });
+  } catch (e){
+    console.log('end')
   }
-  i++;
 }
 
-function recursiveRun() {
-  
-  if (run)
-}
-
-// console.log(run(rules))
-// run(rules)
-
+replaceCommands(rules);
