@@ -2,10 +2,6 @@ const fs = require('fs');
 const file = process.argv.slice(2);
 let input = fs.readFileSync(`${__dirname}/${file}.txt`, 'utf-8').trim().split('\n').map(Number);
 
-const sum = (a , b) => {
-    return a + b;
-};
-
 const findSumPairs = (arr, target) => {
     const map = [];
     const indexnum = [];
@@ -25,21 +21,50 @@ const findSumPairs = (arr, target) => {
 
 const findContiguousSet = (arr, target, size = 2, index = 0) => {
     const sliced = arr.slice(index, size);
-    const sumnum = sliced.reduce(sum, 0);
+    const sum = sliced.reduce((a, b) => a + b, 0);
     // console.log(sliced);
-    // console.log(sumnum)
-    if (sumnum > target) {
+    // console.log(sum)
+    console.log(sliced.length, index, sum)
+    if (sum > target) {
         return findContiguousSet(arr, target, 2, index + 1)
-    } else if (sumnum === target) {
-        const sorted = sliced.sort((a, b) => a - b);
-        
+    } else if (sum === target) {
+        // const sorted = sliced.sort((a, b) => a - b);
+
         // console.log(sliced[0], sliced[sliced.length-1])
-        return sorted[0] + sorted[sorted.length - 1];
+        return sliced;
     } else {
         // console.log('ouutttaa heeere!')
         return findContiguousSet(arr, target, size + 1, index)
     }
     // return findContiguousSet('')
+};
+
+const findConiguous = (arr, target) => {
+    var size = 2;
+    var index = 0;
+    let sum = 0;
+    let range = [];
+    let going = true;
+    
+    while (going) {
+        range = arr.slice(index, size);
+        sum = range.reduce((a, b) => a + b, 0);
+        if (sum > target) {
+            size = 2;
+            index++;
+        }
+        if (sum === target) {
+            console.log('sum', sum);
+            going = false;
+            break;
+        } else {
+            size++;
+        }
+
+
+    }
+    console.log('sum', sum)
+    return range;
 };
 
 function partOne(input, preamble, index = 0) {
@@ -56,10 +81,13 @@ function partTwo(input, target) {
     return target;
 }
 
-const partone = partOne(input, 5);
+const partone = partOne(input, 25);
 console.log(partone);
 // console.log(partTwo(input, partOne(input, 25)));
-const partwo = findContiguousSet(input, partone)
-console.log(partwo);
+let partwo = findConiguous(input, partone);
+partwo = partwo.sort((a, b) => a - b);
+console.log(partwo[0])
+console.log(partwo[partwo.length - 1])
+console.log(partwo[0] + partwo[partwo.length - 1]);
 
 // console.log(findContiguousSet(input, 127))
