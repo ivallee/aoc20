@@ -19,33 +19,13 @@ const findSumPairs = (arr, target) => {
     return false;
 };
 
-const findContiguousSet = (arr, target, size = 2, index = 0) => {
-    const sliced = arr.slice(index, size);
-    const sum = sliced.reduce((a, b) => a + b, 0);
-    // console.log(sliced);
-    // console.log(sum)
-    console.log(sliced.length, index, sum)
-    if (sum > target) {
-        return findContiguousSet(arr, target, 2, index + 1)
-    } else if (sum === target) {
-        // const sorted = sliced.sort((a, b) => a - b);
-
-        // console.log(sliced[0], sliced[sliced.length-1])
-        return sliced;
-    } else {
-        // console.log('ouutttaa heeere!')
-        return findContiguousSet(arr, target, size + 1, index)
-    }
-    // return findContiguousSet('')
-};
-
-const findConiguous = (arr, target) => {
+const findContiguousSet = (arr, target) => {
     var size = 2;
     var index = 0;
     let sum = 0;
     let range = [];
     let going = true;
-    
+
     while (going) {
         range = arr.slice(index, size);
         sum = range.reduce((a, b) => a + b, 0);
@@ -54,16 +34,12 @@ const findConiguous = (arr, target) => {
             index++;
         }
         if (sum === target) {
-            console.log('sum', sum);
             going = false;
             break;
         } else {
             size++;
         }
-
-
     }
-    console.log('sum', sum)
     return range;
 };
 
@@ -78,16 +54,12 @@ function partOne(input, preamble, index = 0) {
 }
 
 function partTwo(input, target) {
-    return target;
+    const sumset = findContiguousSet(input, target).sort((a,b) => a - b);
+
+    return sumset[0]  + sumset[sumset.length - 1];
 }
 
-const partone = partOne(input, 25);
-console.log(partone);
-// console.log(partTwo(input, partOne(input, 25)));
-let partwo = findConiguous(input, partone);
-partwo = partwo.sort((a, b) => a - b);
-console.log(partwo[0])
-console.log(partwo[partwo.length - 1])
-console.log(partwo[0] + partwo[partwo.length - 1]);
-
-// console.log(findContiguousSet(input, 127))
+const one = partOne(input, 25);
+const two = partTwo(input, one);
+console.log(one);
+console.log(two);
