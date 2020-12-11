@@ -14,19 +14,7 @@ const getDiffs = (number, i, arr) => {
     }
 };
 
-const countOccurences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
-
-const getGraph = (number, i, arr) => {
-    console.log(number)
-    // const diff = arr[i + 1] - number;
-    // console.log(diff)
-    let obj = {};
-    obj[number] = arr.filter(num => {
-        console.log('nummies', num - number )
-        return (num - number) > 0 && (num - number) <= 3;
-    });
-    return obj;
-}
+const countOccurences = (arr, val) => arr.reduce((a, b) => (b === val ? a + 1 : a), 0);
 
 function partOne(input) {
     let adapters = [...input];
@@ -36,14 +24,19 @@ function partOne(input) {
 }
 
 function partTwo(input) {
-    let adapters = [...input];
-    adapters.unshift(0);
-    adapters.push(Math.max(...adapters) + 3);
-    const graph = adapters.sort((a, b) => a - b).map(getGraph);
-    console.log(graph)
-    // console.log(graph)
+    const adapters = [...input];
+    let combos = adapters.sort((a, b) => a - b).reduce((acc, adapter) => {
+        const optionOne = acc[adapter - 3] ? acc[adapter - 3] : 0;
+        const optionTwo = acc[adapter - 2] ? acc[adapter - 2] : 0;
+        const optionThree = acc[adapter - 1] ? acc[adapter - 1] : 0;
+
+        acc[adapter] = optionOne + optionTwo + optionThree;
+        return acc;
+    }, [1]);
+    return combos[combos.length - 1];
 }
 
 const one = partOne(data);
 console.log(one);
-console.log(partTwo(data))
+const two = partTwo(data);
+console.log(two);
